@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#8bdcff">
+<title>ASTERA'S Memories</title>
+
+<style>
+:root {
+  --blue: #8bdcff;
+  --blue-dark: #188bc1;
+  --yellow: #ffdf58;
+  --white: #ffffff;
+  --text: #23415a;
+}
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(160deg, #c8f1ff, #fff9d9);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+header {
+  background: linear-gradient(120deg, #77d5ff, #d5f5ff);
+  text-align: center;
+  padding: 28px 16px;
+  border-bottom: 5px solid var(--yellow);
+}
+
+.mascot {
+  width: 105px;
+  height: 105px;
+  margin: auto;
+  border-radius: 50%;
+  background: var(--yellow);
+  border: 4px solid white;
+  display: grid;
+  place-items: center;
+  font-size: 65px;
+  box-shadow: 0 5px 15px #4a9dc555;
+}
+
+header h1 {
+  margin: 12px 0 5px;
+  font-size: clamp(26px, 6vw, 42px);
+  color: #126d9f;
+}
+
+header p { margin: 8px 0; }
+
+.badge {
+  display: inline-block;
+  background: var(--yellow);
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+main {
+  max-width: 950px;
+  margin: auto;
+  padding: 18px;
+}
+
+.card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 5px 18px #277ea51b;
+  border: 2px solid #d4f2ff;
+}
+
+h2 { color: #1684b6; margin-top: 0; }
+
+input, textarea, select, button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin: 9px 0;
+  border-radius: 12px;
+  font-size: 15px;
+}
+
+input, textarea, select {
+  border: 1px solid #acdced;
+  background: #f7fcff;
+  color: var(--text);
+}
+
+textarea { min-height: 75px; }
+
+button {
+  background: var(--yellow);
+  border: 0;
+  color: #4e4515;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.primary {
+  background: var(--blue-dark);
+  color: white;
+}
+
+button:disabled {
+  opacity: .6;
+  cursor: wait;
+}
+
+.small {
+  font-size: 12px;
+  color: #57768b;
+  line-height: 1.6;
+}
+
+.hidden { display: none !important; }
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  margin-bottom: 15px;
+}
+
+.tabs button { font-size: 13px; }
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+  gap: 13px;
+}
+
+.item {
+  border: 1px solid #d2edf8;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #f6fcff;
+  min-width: 0;
+}
+
+.item img, .item video {
+  width: 100%;
+  height: 180px;
+  display: block;
+  object-fit: cover;
+  background: #e5f7ff;
+}
+
+.item-info { padding: 10px; overflow-wrap: anywhere; }
+.item-info h3 { margin: 0 0 8px; font-size: 15px; }
+.item-info p { font-size: 13px; white-space: pre-wrap; }
+.item-info button { font-size: 12px; }
+
+.status {
+  background: #fff0a8;
+  padding: 5px 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  display: inline-block;
+}
+
+.empty {
+  text-align: center;
+  padding: 25px 10px;
+  color: #63849b;
+}
+
+footer {
+  text-align: center;
+  padding: 25px 12px;
+  background: #8bdcff;
+  line-height: 1.8;
+}
+
+footer strong { color: #125f8c; }
+
+#message {
+  padding: 12px;
+  background: #fff5c9;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 650px) {
+  .item img, .item video { height: 220px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="mascot" aria-label="Maskot dinosaurus">🦖</div>
+  <h1>ASTERA'S Memories</h1>
+  <p>Satu kelas, sejuta cerita, kenangan selamanya! 💛</p>
+  <span class="badge">📸 Galeri Kenangan Kelas</span>
+</header>
+
+<main>
+  <div id="message">
+    💙 Selamat datang di ASTERA'S Memories!
+  </div>
+
+  <section class="card" id="loginCard">
+    <h2>🔐 Login Anggota</h2>
+    <p class="small">
+      Akun dibuat oleh admin. Pengunjung tidak bisa mengunggah
+      foto atau video tanpa login.
+    </p>
+
+    <form id="loginForm">
+      <input id="email" type="email"
+        placeholder="Email akun anggota" autocomplete="username" required>
+      <input id="password" type="password"
+        placeholder="Kata sandi" autocomplete="current-password" required>
+      <button class="primary" type="submit">Masuk</button>
+    </form>
+
+    <button id="logoutBtn" class="hidden">Keluar dari akun</button>
+  </section>
+
+  <section class="card hidden" id="memberCard">
+    <h2>📤 Bagikan Kenangan</h2>
+    <p id="welcome"></p>
+
+    <form id="uploadForm">
+      <label for="media">Pilih foto atau video</label>
+      <input id="media" type="file"
+        accept="image/jpeg,image/png,image/webp,video/mp4,video/webm"
+        required>
+
+      <input id="title" type="text" maxlength="80"
+        placeholder="Judul kenangan" required>
+
+      <textarea id="caption" maxlength="500"
+        placeholder="Ceritakan kenangan bersama teman-teman"></textarea>
+
+      <button class="primary" type="submit">Kirim untuk Ditinjau</button>
+    </form>
+
+    <p class="small">
+      Foto/video akan menunggu persetujuan admin sebelum muncul
+      di galeri publik. Maksimal 20 MB per file.
+    </p>
+  </section>
+
+  <section class="card hidden" id="adminCard">
+    <h2>👑 Panel Admin</h2>
+
+    <div class="tabs">
+      <button type="button" id="showPending">Postingan</button>
+      <button type="button" id="showUsers">Anggota</button>
+      <button type="button" id="showCreate">Buat Akun</button>
+    </div>
+
+    <div id="adminContent"></div>
+  </section>
+
+  <section class="card">
+    <h2>💛 Galeri Kenangan</h2>
+    <p class="small">
+      Postingan yang sudah disetujui akan muncul di sini.
+    </p>
+    <div id="gallery" class="gallery">
+      <div class="empty">Memuat galeri...</div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <strong>ASTERA'S MEMORIES 🦖</strong><br>
+  Dibuat oleh <strong>@fajri amiruddin</strong><br>
+  Khusus untuk ASTERA'S 💙💛<br>
+  <small>Every picture tells our story.</small>
+</footer>
+
+<script type="module">
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+
+import {
+  getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+import {
+  getFirestore, collection, doc, getDoc, getDocs,
+  addDoc, updateDoc, deleteDoc, query, where, orderBy, limit,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+import {
+  getStorage, ref, uploadBytes, getDownloadURL, deleteObject
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-storage.js";
+
+/*
+  LANGKAH PENTING:
+  Ganti konfigurasi di bawah dengan konfigurasi web Firebase milikmu.
+  Jangan memasukkan private key server ke dalam HTML.
+*/
+const firebaseConfig = {
+  apiKey: "ISI_API_KEY_FIREBASE",
+  authDomain: "ISI_PROJECT_ID.firebaseapp.com",
+  projectId: "ISI_PROJECT_ID",
+  storageBucket: "ISI_STORAGE_BUCKET",
+  messagingSenderId: "ISI_SENDER_ID",
+  appId: "ISI_APP_ID"
+};
+
+const setupBelumSelesai =
+  Object.values(firebaseConfig).some(v => v.startsWith("ISI_"));
+
+const $ = id => document.getElementById(id);
+
+const app = !setupBelumSelesai ? initializeApp(firebaseConfig) : null;
+const auth = app ? getAuth(app) : null;
+const db = app ? getFirestore(app) : null;
+const storage = app ? getStorage(app) : null;
+
+let currentUser = null;
+let currentProfile = null;
+let objectUrls = [];
+
+function message(text) {
+  $("message").textContent = text;
+}
+
+function escapeText(value = "") {
+  return String(value).replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;",
+    '"': "&quot;", "'": "&#39;"
+  })[c]);
+}
+
+function show(id, yes) {
+  $(id).classList.toggle("hidden", !yes);
+}
+
+function releaseUrls() {
+  objectUrls.forEach(URL.revokeObjectURL);
+  objectUrls = [];
+}
+
+function makeMedia(url, type) {
+  const element = document.createElement(type.startsWith("video/")
+    ? "video" : "img");
+  element.src = url;
+
+  if (element.tagName === "VIDEO") {
+    element.controls = true;
+    element.playsInline = true;
+  } else {
+    element.alt = "Foto kenangan ASTERA'S";
+    element.loading = "lazy";
+  }
+  return element;
+}
+
+function renderCards(target, items, options = {}) {
+  target.replaceChildren();
+
+  if (!items.length) {
+    target.innerHTML = '<div class="empty">Belum ada postingan.</div>';
+    return;
+  }
+
+  items.forEach(item => {
+    const card = document.createElement("article");
+    card.className = "item";
+
+    card.append(makeMedia(item.url, item.contentType || "image/jpeg"));
+
+    const info = document.createElement("div");
+    info.className = "item-info";
+
+    const title = document.createElement("h3");
+    title.textContent = item.title || "Kenangan ASTERA'S";
+
+    const caption = document.createElement("p");
+    caption.textContent = item.caption || "";
+
+    info.append(title, caption);
+
+    if (options.status) {
+      const status = document.createElement("span");
+      status.className = "status";
+      status.textContent = item.status || "pending";
+      info.append(status);
+    }
+
+    if (options.actions) options.actions(info, item);
+
+    card.append(info);
+    target.append(card);
+  });
+}
+
+async function loadGallery() {
+  releaseUrls();
+
+  try {
+    const q = query(
+      collection(db, "posts"),
+      where("status", "==", "approved"),
+      orderBy("createdAt", "desc"),
+      limit(100)
+    );
+
+    const snapshot = await getDocs(q);
+    const items = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderCards($("gallery"), items);
+  } catch (error) {
+    message("Galeri belum tersedia. Periksa konfigurasi dan aturan Firebase.");
+    console.error(error);
+  }
+}
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  try {
+    await signInWithEmailAndPassword(
+      auth, $("email").value.trim(), $("password").value
+    );
+    message("Login berhasil! 💙");
+  } catch (error) {
+    message("Login gagal. Periksa email dan kata sandi.");
+  }
+});
+
+$("logoutBtn").addEventListener("click", async () => {
+  await signOut(auth);
+});
+
+$("uploadForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  if (!currentUser || !currentProfile ||
+      currentProfile.status !== "active") {
+    message("Akun belum aktif atau belum mendapat izin.");
+    return;
+  }
+
+  const file = $("media").files[0];
+  const allowed = [
+    "image/jpeg", "image/png", "image/webp",
+    "video/mp4", "video/webm"
+  ];
+
+  if (!file || !allowed.includes(file.type)) {
+    message("Jenis file tidak didukung.");
+    return;
+  }
+
+  if (file.size > 100 * 1024 * 1024) {
+    message("Ukuran file maksimal 100 MB.");
+    return;
+  }
+
+  const button = event.submitter;
+  button.disabled = true;
+
+  try {
+    const postRef = doc(collection(db, "posts"));
+    const path = `uploads/${currentUser.uid}/${postRef.id}`;
+    const storageRef = ref(storage, path);
+
+    await uploadBytes(storageRef, file, {
+      contentType: file.type
+    });
+
+    const url = await getDownloadURL(storageRef);
+
+    await addDoc(collection(db, "posts"), {
+      ownerUid: currentUser.uid,
+      title: $("title").value.trim(),
+      caption: $("caption").value.trim(),
+      url,
+      storagePath: path,
+      contentType: file.type,
+      status: "pending",
+      createdAt: serverTimestamp()
+    });
+
+    $("uploadForm").reset();
+    message("Postingan dikirim dan menunggu persetujuan admin. 💛");
+  } catch (error) {
+    message("Gagal mengunggah. Periksa aturan Firebase Storage dan Firestore.");
+    console.error(error);
+  } finally {
+    button.disabled = false;
+  }
+});
+
+async function isAdmin() {
+  if (!currentUser) return false;
+  const token = await currentUser.getIdTokenResult(true);
+  return token.claims.admin === true;
+}
+
+async function loadProfile() {
+  const snapshot = await getDoc(doc(db, "users", currentUser.uid));
+  currentProfile = snapshot.exists() ? snapshot.data() : null;
+}
+
+async function refreshAdmin() {
+  if (!(await isAdmin())) {
+    message("Akses panel admin ditolak.");
+    return;
+  }
+
+  await showPending();
+}
+
+async function showPending() {
+  if (!(await isAdmin())) return;
+
+  const root = $("adminContent");
+  root.innerHTML = "<p>Memuat postingan...</p>";
+
+  try {
+    const snapshot = await getDocs(query(
+      collection(db, "posts"),
+      where("status", "==", "pending"),
+      limit(100)
+    ));
+
+    const items = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    renderCards(root, items, {
+      status: true,
+      actions(info, item) {
+        const approve = document.createElement("button");
+        approve.textContent = "Setujui";
+        approve.onclick = async () => {
+          await updateDoc(doc(db, "posts", item.id), {
+            status: "approved",
+            reviewedBy: currentUser.uid,
+            reviewedAt: serverTimestamp()
+          });
+          await showPending();
+          await loadGallery();
+        };
+
+        const reject = document.createElement("button");
+        reject.textContent = "Tolak";
+        reject.onclick = async () => {
+          await updateDoc(doc(db, "posts", item.id), {
+            status: "rejected",
+            reviewedBy: currentUser.uid,
+            reviewedAt: serverTimestamp()
+          });
+          await showPending();
+        };
+
+        info.append(approve, reject);
+      }
+    });
+  } catch (error) {
+    root.textContent = "Gagal memuat postingan.";
+    console.error(error);
+  }
+}
+
+async function showUsers() {
+  if (!(await isAdmin())) return;
+
+  const root = $("adminContent");
+  root.replaceChildren();
+
+  const snapshot = await getDocs(query(collection(db, "users"), limit(200)));
+
+  snapshot.forEach(userDoc => {
+    const user = userDoc.data();
+    const row = document.createElement("div");
+    row.className = "card";
+
+    const label = document.createElement("p");
+    label.textContent =
+      `${user.displayName || "Anggota"} — ${user.email || ""} — ${user.status || "pending"}`;
+
+    const toggle = document.createElement("button");
+    toggle.textContent = user.status === "active"
+      ? "Nonaktifkan akun" : "Aktifkan akun";
+
+    toggle.onclick = async () => {
+      await updateDoc(doc(db, "users", userDoc.id), {
+        status: user.status === "active" ? "disabled" : "active"
+      });
+      await showUsers();
+    };
+
+    row.append(label, toggle);
+    root.append(row);
+  });
+}
+
+async function showCreate() {
+  if (!(await isAdmin())) return;
+
+  const root = $("adminContent");
+  root.innerHTML = `
+    <h3>Buat akun anggota</h3>
+    <p class="small">
+      Pembuatan akun harus dilakukan melalui Firebase Admin SDK
+      di server tepercaya. Jangan membuat akun admin dari HTML.
+    </p>
+    <p>Siapkan endpoint server aman untuk membuat akun, lalu hubungkan formulir ini.</p>
+  `;
+}
+
+$("showPending").onclick = showPending;
+$("showUsers").onclick = showUsers;
+$("showCreate").onclick = showCreate;
+
+if (setupBelumSelesai) {
+  message("Konfigurasi Firebase belum diisi. Ikuti petunjuk di bawah kode.");
+  $("gallery").innerHTML =
+    '<div class="empty">Galeri online akan aktif setelah Firebase dikonfigurasi.</div>';
+} else {
+  onAuthStateChanged(auth, async user => {
+    currentUser = user;
+    currentProfile = null;
+
+    show("loginForm", !user);
+    show("logoutBtn", !!user);
+    show("memberCard", false);
+    show("adminCard", false);
+
+    if (user) {
+      try {
+        await loadProfile();
+
+        if (currentProfile?.status === "active") {
+          show("memberCard", true);
+          $("welcome").textContent =
+            "Halo, " + (currentProfile.displayName || "anggota ASTERA'S") + "!";
+        } else {
+          message("Akun belum aktif. Hubungi admin ASTERA'S.");
+        }
+
+        if (await isAdmin()) {
+          show("adminCard", true);
+          await refreshAdmin();
+        }
+      } catch (error) {
+        message("Profil akun belum tersedia. Hubungi admin.");
+        console.error(error);
+      }
+    }
+
+    await loadGallery();
+  });
+}
+</script>
+
+</body>
+</html>
